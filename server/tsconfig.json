@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES6",                           // Compile to ES6 JavaScript
+    "module": "commonjs",                      // Use CommonJS module system
+    "outDir": "./dist",                        // Output directory for compiled files
+    "rootDir": "./src",                        // Root directory for source files
+    "strict": false,                           // Disable strict type-checking
+    "esModuleInterop": true,                   // Enable compatibility with ES module imports
+    "skipLibCheck": true,                      // Skip library type checks for faster compilation
+    "forceConsistentCasingInFileNames": true,  // Ensure consistent casing in filenames
+    "typeRoots": ["node_modules/@types", "./types"], // Include custom type definitions
+    "resolveJsonModule": true,                 // Allow importing .json files
+    "allowSyntheticDefaultImports": true       // Allow default imports for modules without default exports
+  },
+  "include": [
+    "src/**/*.ts",                             // Include all TypeScript files in the src folder
+    "types/**/*.d.ts"                          // Include all type definitions in the types folder
+  ],
+  "exclude": [
+    "node_modules",                            // Exclude the node_modules folder
+    "dist"                                     // Exclude the dist folder
+  ]
+}
