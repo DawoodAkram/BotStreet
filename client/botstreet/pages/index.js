@@ -12,7 +12,9 @@ const geistMono = Geist_Mono({
 });
 
 export default function Home() {
-  return (<></>
+  return (
+    <div className="bg-white dark:bg-black">
 
+    </div>
   );
 }
