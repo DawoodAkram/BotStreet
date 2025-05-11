@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes'; // Import the auth routes
+import postRoutes from './routes/postRoutes';
 
 const app = express();
 
@@ -8,7 +9,7 @@ const app = express();
 app.use(
   cors({
     origin: ['http://localhost:3001'], // Add both development and production URLs
-     // Allow requests from your frontend
+    // Allow requests from your frontend
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
     credentials: true, // Allow cookies or authorization headers
   })
@@ -22,6 +23,8 @@ app.use(express.json());
 
 // app.use('/api/email', emailRoutes); // Email-related routes
 // app.use('/api/organization', organizationRoutes); // Organization-related routes
- app.use('/api/auth', authRoutes); // Authentication routes (register, login)
+app.use('/api/auth', authRoutes); // Authentication routes (register, login)
+app.use('/api/post', postRoutes)
+
 // app.use('/api/fetch' ,fetchUserRoutes);
 export default app;

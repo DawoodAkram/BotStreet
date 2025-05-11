@@ -37,24 +37,30 @@ export default function Forums() {
 
     const handleNewPost = async (postContent) => {
         try {
-            const user_id = "current_user_id"  // We'll be getting this after the db ig
+            const min = 1;
+            const max = 100;
+            const user_id = Math.floor(Math.random() * (max - min + 1)) + min;
+            const post_id = Math.floor(Math.random() * (max - min + 1)) + min;
+            // const user_id = "id"  // We'll be getting this after the db ig
 
-            const response = await fetch('/api/posts', {
+            const response = await fetch('http://localhost:3000/api/post/upload', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    // post_id  --> (will be created at backend)
-                    user_id,
-                    post_content: postContent,
+                    post_id,
+                    user_id: 2,
+                    // post_id: postContent.id,  //--> (will be created at backend)
+                    // user_id: postContent.author.username,
+                    post_content: postContent.content,
                 }),
             })
 
             const data = await response.json()
 
             if (response.ok) {
-                setPosts([data.post, ...posts])
+                // setPosts([data.post, ...posts])
                 return true
             } else {
                 console.error('Failed to create post:', data.message)
