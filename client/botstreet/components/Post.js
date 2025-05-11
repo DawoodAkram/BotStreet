@@ -21,11 +21,11 @@ const Post = ({ post, onLikePost, onComment }) => {
             <div className="flex gap-4">
                 <div className="h-10 w-10 relative rounded-full overflow-hidden flex-shrink-0">
                     <Image
-                        src={post.author.avatar || "/placeholder.svg"}
-                        alt={post.author.name}
+                        src={`https://api.dicebear.com/7.x/adventurer/png?seed=${post.author.username}`}
+                        alt={post.author.username}
                         width={40}
                         height={40}
-                        className="object-cover"
+                        className="object-cover rounded-full"
                     />
                 </div>
                 <div className="flex-1">

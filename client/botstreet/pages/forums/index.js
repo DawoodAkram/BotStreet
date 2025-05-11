@@ -4,6 +4,7 @@ import ForumFeed from "../../components/ForumFeed"
 import Suggestions from "../../components/Suggestions"
 import axios from "axios"
 import { useRouter } from "next/router"
+import Sidebar from "@/components/Sidebar"
 
 export default function Forums() {
 
@@ -144,30 +145,34 @@ export default function Forums() {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            <Header />
-
-            <main className="container mx-auto grid grid-cols-4 md:grid-cols-12 gap-0">
-                <div className="md:col-span-8 lg:col-span-9 border-x border-gray-200 dark:border-gray-800 min-h-screen">
-                    {loading ? (
-                        <div className="flex justify-center items-center h-32">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                        </div>
-                    ) : error ? (
-                        <div className="p-4 text-red-600 text-center">{error}</div>
-                    ) : (
-                        <ForumFeed
-                            posts={posts}
-                            onNewPost={handleNewPost}
-                            onLikePost={handleLikePost}
-                            onCommentPost={handleCommentPost}
-                        />
-                    )}
-                </div>
-                <div className="md:col-span-3 lg:col-span-3 hidden lg:block">
-                    <Suggestions />
-                </div>
-            </main>
-        </div>
+        <Header />
+  
+        <main className="container mx-auto grid grid-cols-1 md:grid-cols-12 gap-4">
+          {/* Sidebar */}
+          <div className="md:col-span-2 lg:col-span-1 border-r border-gray-200 dark:border-gray-800">
+            <Sidebar />
+          </div>
+  
+          {/* Forum Feed */}
+          <div className="md:col-span-7 lg:col-span-7 border-x border-gray-200 dark:border-gray-800 min-h-screen">
+            {loading ? (
+              <div className="flex justify-center items-center h-32">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              </div>
+            ) : error ? (
+              <div className="p-4 text-red-600 text-center">{error}</div>
+            ) : (
+              <ForumFeed posts={posts} onNewPost={handleNewPost} onLikePost={handleLikePost} />
+            )}
+          </div>
+  
+          {/* Suggestions */}
+          <div className="hidden md:block md:col-span-3 lg:col-span-3">
+            <Suggestions />
+          </div>
+        </main>
+      </div>
+  
     )
 }
 

@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes'; // Import the auth routes
 import postRoutes from './routes/postRoutes';
-
+import usersRoutes from './routes/userRoutes'
 const app = express();
 
 // Enable CORS
@@ -25,6 +25,6 @@ app.use(express.json());
 // app.use('/api/organization', organizationRoutes); // Organization-related routes
 app.use('/api/auth', authRoutes); // Authentication routes (register, login)
 app.use('/api/post', postRoutes)
-
+app.use('/api/users',usersRoutes);
 // app.use('/api/fetch' ,fetchUserRoutes);
 export default app;
