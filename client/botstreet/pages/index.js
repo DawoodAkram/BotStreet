@@ -10,7 +10,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
       <HomeHeader />
-      
+
       <main>
         {/* Hero Section */}
         <section className="w-full py-20 md:py-28">
@@ -24,7 +24,7 @@ const Home = () => {
               </p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Link href="/forums">  {/* Use Link for routing */}
-                  <button 
+                  <button
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                     className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-indigo-500 px-6 py-4 text-lg font-medium text-white transition-all duration-300 ease-out hover:bg-indigo-600"
@@ -40,16 +40,16 @@ const Home = () => {
                 </Link>
               </div>
             </div>
-            
+
             <div className="flex-1 relative">
               <div className="relative w-full h-80 md:h-96 lg:h-96">
                 <div className="absolute top-0 right-0 w-4/5 h-4/5 bg-indigo-500 rounded-lg opacity-10 transform -rotate-6"></div>
                 <div className="absolute bottom-0 left-0 w-4/5 h-4/5 bg-purple-600 rounded-lg opacity-10 transform rotate-6"></div>
                 <div className="absolute inset-0 m-auto w-full h-full flex items-center justify-center">
                   <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-700 rounded-md shadow-lg border border-gray-700 flex items-center justify-center overflow-hidden">
-                    <img 
-                      src="\community.png" 
-                      alt="Community Illustration" 
+                    <img
+                      src="\community.png"
+                      alt="Community Illustration"
                       className="max-w-full max-h-full object-contain"
                     />
                   </div>
@@ -58,7 +58,7 @@ const Home = () => {
             </div>
           </div>
         </section>
-        
+
         {/* Features Section Preview */}
         <section className="w-full py-16 bg-gray-800">
           <div className="container mx-auto px-6">
@@ -66,7 +66,7 @@ const Home = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-white">Why Join BotStreet?</h2>
               <div className="w-24 h-1 bg-indigo-500 mx-auto mt-4"></div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Feature 1 */}
               <div className="bg-gray-750 bg-gradient-to-br from-gray-750 to-gray-700 p-8 rounded-md border border-gray-600 shadow-md transition-all duration-300 hover:shadow-lg hover:border-indigo-500">
@@ -78,7 +78,7 @@ const Home = () => {
                 <h3 className="text-xl font-bold text-white mb-3">Connect with Experts</h3>
                 <p className="text-gray-300">Engage with industry professionals and like-minded enthusiasts in our vibrant community forums.</p>
               </div>
-              
+
 
               {/* Feature 2 */}
               <div className="bg-gray-750 bg-gradient-to-br from-gray-750 to-gray-700 p-8 rounded-md border border-gray-600 shadow-md transition-all duration-300 hover:shadow-lg hover:border-indigo-500">
@@ -90,7 +90,7 @@ const Home = () => {
                 <h3 className="text-xl font-bold text-white mb-3">Share Knowledge</h3>
                 <p className="text-gray-300">Contribute to projects, share your insights, and help others grow in their technical journey.</p>
               </div>
-              
+
               {/* Feature 3 */}
               <div className="bg-gray-750 bg-gradient-to-br from-gray-750 to-gray-700 p-8 rounded-md border border-gray-600 shadow-md transition-all duration-300 hover:shadow-lg hover:border-indigo-500">
                 <div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center mb-6">

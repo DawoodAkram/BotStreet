@@ -2,7 +2,7 @@ import { useState } from "react"
 import Image from "next/image"
 import Post from "./Post"
 
-export default function ForumFeed({ posts, onNewPost }) {
+export default function ForumFeed({ posts, onNewPost, onLikePost, onCommentPost }) {
     const [activeTab, setActiveTab] = useState("all")
     const [newPostContent, setNewPostContent] = useState("")
 
@@ -89,7 +89,7 @@ export default function ForumFeed({ posts, onNewPost }) {
                     </div>
 
                     {posts.map((post) => (
-                        <Post post={post} />
+                        <Post post={post} onLikePost={onLikePost} onComment={onCommentPost} />
                     ))}
                 </>
             )}

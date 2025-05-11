@@ -3,11 +3,12 @@ import Header from "../../components/Header"
 import ForumFeed from "../../components/ForumFeed"
 import Suggestions from "../../components/Suggestions"
 import { redirect } from "next/dist/server/api-utils"
+import axios from "axios"
 
 export default function Forums() {
 
     const [posts, setPosts] = useState([])
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [refetch, setRefetch] = useState(false)
 
@@ -15,7 +16,8 @@ export default function Forums() {
     useEffect(() => {
         async function fetchPosts() {
             try {
-                const response = await fetch('http://localhost:3000/api/post/')
+                const user_id = localStorage.getItem('userId')
+                const response = await fetch(`http://localhost:3000/api/post/?user_id=${user_id}`)
                 const data = await response.json()
 
                 if (response.ok) {
@@ -64,36 +66,70 @@ export default function Forums() {
         }
     }
 
-    const handleLikePost = async (postId) => {
+    const handleLikePost = async (post_id) => {
         try {
             const user_id = localStorage.getItem('userId')
+            console.log(post_id);
 
             if (!user_id) {
                 redirect('../signin.jsx')
             }
 
-            const response = await fetch(`/api/posts/${postId}/likes`, {  // api/posts/likes
+            const response = await fetch(`http://localhost:3000/api/post/likes`, {  // api/posts/likes
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ user_id }),      // user_id, post_id
+                body: JSON.stringify({
+                    user_id,
+                    post_id
+                }),      // user_id, post_id
             })
 
             if (response.ok) {
-                setPosts(posts.map(post => {
-                    if (post.post_id === postId) {
-                        return { ...post, like_count: post.like_count + 1 }
-                    }
-                    return post
-                }))
-                return true
+                setRefetch(prev => !prev)
             } else {
                 console.error('Failed to like post')
                 return false
             }
         } catch (err) {
             console.error('Error liking post:', err)
+            return false
+        }
+    }
+
+    const handleCommentPost = async (post_id, comment_text) => {
+        try {
+            const user_id = localStorage.getItem('userId')
+
+            if (!user_id || !post_id || !comment_text) {
+                console.log({ user_id, post_id, comment_text });
+                return
+            }
+
+            console.log({ user_id, post_id, comment_text }, "OUT");
+
+            const response = await fetch('http://localhost:3000/api/post/comment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id,
+                    post_id,
+                    comment_text,
+                }),
+            })
+
+
+            if (response.ok) {
+                setRefetch(prev => !prev)
+            } else {
+                console.error('Failed to comment on post')
+                return false
+            }
+        } catch (err) {
+            console.error('Error commenting post:', err)
             return false
         }
     }
@@ -115,6 +151,7 @@ export default function Forums() {
                             posts={posts}
                             onNewPost={handleNewPost}
                             onLikePost={handleLikePost}
+                            onCommentPost={handleCommentPost}
                         />
                     )}
                 </div>
