@@ -1,47 +1,42 @@
 import { useState, useEffect } from "react"
 import Header from "../../components/Header"
 import ForumFeed from "../../components/ForumFeed"
-import { samplePosts } from "@/data/sampleData"
 import Suggestions from "../../components/Suggestions"
+import { redirect } from "next/dist/server/api-utils"
 
 export default function Forums() {
 
-    const [posts, setPosts] = useState(samplePosts)
+    const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
-
-    console.log(posts);
+    const [refetch, setRefetch] = useState(false)
 
     // To fetch Posts from the DB (backend)
-    // useEffect(() => {
-    //     async function fetchPosts() {
-    //         try {
-    //             const response = await fetch()
-    //             const data = await response.json()
+    useEffect(() => {
+        async function fetchPosts() {
+            try {
+                const response = await fetch('http://localhost:3000/api/post/')
+                const data = await response.json()
 
-    //             if (response.ok) {
-    //                 setPosts(data.posts)
-    //             } else {
-    //                 setError(data.message || 'Failed to fetch posts')
-    //             }
-    //         } catch (err) {
-    //             setError('Error connecting to the server')
-    //             console.error(err)
-    //         } finally {
-    //             setLoading(false)
-    //         }
-    //     }
+                if (response.ok) {
+                    setPosts(data)
+                } else {
+                    setError('Failed to fetch posts')
+                }
+            } catch (err) {
+                setError('Error connecting to the server')
+                console.error(err)
+            } finally {
+                setLoading(false)
+            }
+        }
 
-    //     fetchPosts()
-    // }, [])
+        fetchPosts()
+    }, [refetch])
 
     const handleNewPost = async (postContent) => {
         try {
-            const min = 1;
-            const max = 100;
-            const user_id = Math.floor(Math.random() * (max - min + 1)) + min;
-            const post_id = Math.floor(Math.random() * (max - min + 1)) + min;
-            // const user_id = "id"  // We'll be getting this after the db ig
+            const user_id = localStorage.getItem('userId')
 
             const response = await fetch('http://localhost:3000/api/post/upload', {
                 method: 'POST',
@@ -49,10 +44,7 @@ export default function Forums() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    post_id,
-                    user_id: 2,
-                    // post_id: postContent.id,  //--> (will be created at backend)
-                    // user_id: postContent.author.username,
+                    user_id,
                     post_content: postContent.content,
                 }),
             })
@@ -60,7 +52,7 @@ export default function Forums() {
             const data = await response.json()
 
             if (response.ok) {
-                // setPosts([data.post, ...posts])
+                setRefetch((prev) => !prev)
                 return true
             } else {
                 console.error('Failed to create post:', data.message)
@@ -74,7 +66,11 @@ export default function Forums() {
 
     const handleLikePost = async (postId) => {
         try {
-            const user_id = "current_user_id"
+            const user_id = localStorage.getItem('userId')
+
+            if (!user_id) {
+                redirect('../signin.jsx')
+            }
 
             const response = await fetch(`/api/posts/${postId}/likes`, {  // api/posts/likes
                 method: 'POST',

@@ -21,7 +21,15 @@ export default function SignIn() {
     try {
       const response = await axios.post('http://localhost:3000/api/auth/login', formData);
       console.log('Login successful:', response.data);
-      router.push('/mainPage');
+
+      const { token, userId, username } = response.data;
+
+      // Saving username, id and token into browser's local storage
+      localStorage.setItem('username', username);
+      localStorage.setItem('userId', userId);
+      localStorage.setItem('token', token);
+
+      router.push('/');
     } catch (err) {
       console.error('Login failed:', err.response?.data || err.message);
       setError(err.response?.data?.error || 'Login failed');

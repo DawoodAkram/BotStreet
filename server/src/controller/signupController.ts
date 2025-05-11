@@ -61,9 +61,9 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ id: user.userid, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
-    res.status(200).json({ token });
-    console.log('User logged in successfully:', user.userid);  // Check if user is logged in successfully
+    const token = jwt.sign({ id: user.user_id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
+    res.status(200).json({ token, userId: user.user_id, username: user.username });
+    console.log('User logged in successfully:', user.user_id);  // Check if user is logged in successfully
   } catch (error) {
     console.error('Login error:', error.message, error.stack);
     res.status(500).json({ error: 'Internal server error' });
@@ -76,7 +76,7 @@ export const fetchUser = async (req: Request, res: Response): Promise<void> => {
 
   try {
     const token = req.headers.authorization?.split(' ')[1];
-    if (!token) { 
+    if (!token) {
       res.status(401).json({ error: 'No token provided' });
     }
 
