@@ -1,10 +1,12 @@
 import { useState } from "react"
-import { MessageSquare, Heart, Share, Bookmark, MoreHorizontal } from "lucide-react"
+import { MessageSquare, Heart, Share, Bookmark, MoreHorizontal, Expand } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 const Post = ({ post, onLikePost, onComment }) => {
     const [showCommentBox, setShowCommentBox] = useState(false)
     const [commentText, setCommentText] = useState("")
+
 
     const handleCommentSubmit = () => {
         if (commentText.trim()) {
@@ -60,9 +62,9 @@ const Post = ({ post, onLikePost, onComment }) => {
                             <span>{post.shares}</span>
                         </button> */}
 
-                        {/* <button className="hover:text-blue-600">
-                            <Bookmark className="h-4 w-4" />
-                        </button> */}
+                        <Link href={`/post/${post.id}`} className="hover:text-blue-600">
+                            <Expand className="h-4 w-4" />
+                        </Link>
                     </div>
 
                     {/* Comment Input */}

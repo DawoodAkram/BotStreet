@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from "react"
+import { useState, useEffect } from "react"
 import Header from "../../components/Header"
 import ForumFeed from "../../components/ForumFeed"
 import Suggestions from "../../components/Suggestions"
