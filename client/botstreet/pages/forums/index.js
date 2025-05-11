@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useReducer } from "react"
 import Header from "../../components/Header"
 import ForumFeed from "../../components/ForumFeed"
 import Suggestions from "../../components/Suggestions"
-import { redirect } from "next/dist/server/api-utils"
 import axios from "axios"
+import { useRouter } from "next/router"
 
 export default function Forums() {
 
@@ -11,7 +11,7 @@ export default function Forums() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [refetch, setRefetch] = useState(false)
-
+    const router = useRouter()
     // To fetch Posts from the DB (backend)
     useEffect(() => {
         async function fetchPosts() {
@@ -40,6 +40,9 @@ export default function Forums() {
         try {
             const user_id = localStorage.getItem('userId')
 
+            if (!user_id) {
+                router.push('/signin')
+            }
             const response = await fetch('http://localhost:3000/api/post/upload', {
                 method: 'POST',
                 headers: {
@@ -72,7 +75,7 @@ export default function Forums() {
             console.log(post_id);
 
             if (!user_id) {
-                redirect('../signin.jsx')
+                router.push('/signin')
             }
 
             const response = await fetch(`http://localhost:3000/api/post/likes`, {  // api/posts/likes
@@ -104,8 +107,13 @@ export default function Forums() {
 
             if (!user_id || !post_id || !comment_text) {
                 console.log({ user_id, post_id, comment_text });
-                return
+
             }
+
+            if (!user_id) {
+                router.push('/signin')
+            }
+
 
             console.log({ user_id, post_id, comment_text }, "OUT");
 

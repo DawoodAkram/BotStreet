@@ -41,7 +41,7 @@ const Post = ({ post, onLikePost, onComment }) => {
 
                     <p className="mt-1 mb-2">{post.content}</p>
 
-                    <div className="flex justify-between text-gray-500">
+                    <div className="flex justify-around text-gray-500">
                         <button
                             className="flex items-center gap-1 hover:text-blue-600"
                             onClick={() => setShowCommentBox(!showCommentBox)}
