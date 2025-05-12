@@ -1,34 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link'; // Import Link from next/link
+import Link from 'next/link';
 
 const HomeHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
-
-    // Handle scroll effect for header
-    useEffect(() => {
-        const handleScroll = () => {
-            const isScrolled = window.scrollY > 10;
-            if (isScrolled !== scrolled) {
-                setScrolled(isScrolled);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [scrolled]);
 
     const handleReload = () => {
         window.location.href = '/';
     };
 
     return (
-        <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolled ? 'bg-gray-900 shadow-lg py-3' : 'bg-transparent py-5'}`}>
+        <header className="sticky top-0 z-50 w-full bg-gray-900 shadow-lg py-3">
             <div className="container mx-auto">
                 <nav className="flex items-center justify-between px-6 mx-auto">
                     {/* Logo */}
