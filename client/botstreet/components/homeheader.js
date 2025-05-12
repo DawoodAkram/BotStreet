@@ -43,7 +43,6 @@ const HomeHeader = () => {
                         <span className="ml-2 text-xl font-bold text-indigo-400">BotStreet</span>
                     </div>
 
-                    {/* Navigation Links */}
                     <div className="hidden md:flex items-center space-x-8 text-gray-300">
                         <Link href="/" className="text-base font-medium hover:text-indigo-400 transition-colors duration-300 relative group">
                             Home
