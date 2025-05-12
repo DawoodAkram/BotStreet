@@ -140,7 +140,12 @@ export default function Forums() {
                     ) : error ? (
                         <div className="p-4 text-red-600 text-center">{error}</div>
                     ) : (
-                        <ForumFeed posts={posts} onNewPost={handleNewPost} onLikePost={handleLikePost} />
+                        <ForumFeed
+                            posts={posts}
+                            onNewPost={handleNewPost}
+                            onLikePost={handleLikePost}
+                            onCommentPost={handleCommentPost}
+                        />
                     )}
                 </div>
 

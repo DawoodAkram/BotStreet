@@ -129,3 +129,69 @@ export async function handleCommentPost(req: Request, res: Response): Promise<an
         return res.status(500).json({ error: 'Failed to add comment' });
     }
 }
+
+
+export async function handleGetPostById(req: Request, res: Response): Promise<any> {
+    const post_id = req.params.id;
+
+    if (!post_id) {
+        return res.status(400).json({ error: "Post ID is required" });
+    }
+
+    try {
+        // Fetch post and author
+        const [postRows]: any = await pool.execute(`
+            SELECT 
+                posts.post_id,
+                posts.post_content,
+                posts.created_at,
+                users.username,
+                users.email
+            FROM posts
+            JOIN users ON posts.user_id = users.user_id
+            WHERE posts.post_id = ?
+        `, [post_id]);
+
+        if (postRows.length === 0) {
+            return res.status(404).json({ error: "Post not found" });
+        }
+
+        const post = postRows[0];
+
+        // Fetch total likes
+        const [likeRows]: any = await pool.execute(`
+            SELECT COUNT(*) AS like_count
+            FROM likes
+            WHERE post_id = ?
+        `, [post_id]);
+
+        const likes = likeRows[0]?.like_count || 0;
+
+        // Fetch comments with commenter usernames
+        const [commentRows]: any = await pool.execute(`
+            SELECT c.comment_text, u.username
+            FROM comments c
+            JOIN users u ON c.user_id = u.user_id
+            WHERE c.post_id = ?
+            ORDER BY c.created_at ASC
+        `, [post_id]);
+
+        return res.status(200).json({
+            id: post.post_id,
+            content: post.post_content,
+            created_at: post.created_at,
+            author: {
+                username: post.username,
+                email: post.email
+            },
+            likes,
+            comments: commentRows
+        });
+    } catch (error: any) {
+        console.error("Error fetching post:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+
+

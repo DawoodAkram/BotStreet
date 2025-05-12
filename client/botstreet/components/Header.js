@@ -1,12 +1,13 @@
+"use client"
+
 import { useState } from "react"
 import Link from "next/link"
-import { useTheme } from "next-themes"
-import { Menu, Search, Bell, Mail, User, Moon, Sun } from "lucide-react"
+import { Menu, Search, Bell, Mail, User } from "lucide-react"
+import ThemeToggler from "./ThemeToggler"
 
 export default function Header() {
     const [searchQuery, setSearchQuery] = useState("")
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    const { theme, setTheme } = useTheme()
 
     return (
         <header className="sticky top-0 z-50 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800">
@@ -17,7 +18,7 @@ export default function Header() {
                     </button>
 
                     <Link href="/" className="font-bold text-xl text-blue-600 dark:text-blue-500 ml-2">
-                        BotStreet
+                        UniCommunity
                     </Link>
                 </div>
 
@@ -44,12 +45,7 @@ export default function Header() {
                     <button className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 md:hidden">
                         <Search className="h-5 w-5" />
                     </button>
-                    <button
-                        className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800"
-                        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                    >
-                        {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                    </button>
+                    <ThemeToggler />
                     <button className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800">
                         <User className="h-5 w-5" />
                     </button>
