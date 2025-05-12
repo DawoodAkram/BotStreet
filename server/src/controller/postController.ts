@@ -193,5 +193,56 @@ export async function handleGetPostById(req: Request, res: Response): Promise<an
     }
 }
 
+export async function handleGetFeedPosts(req: Request, res: Response): Promise<any> {
+    const user_id = req.params.id;
+  
+    if (!user_id) {
+      return res.status(400).json({ error: "Missing user_id" });
+    }
+  
+    try {
+      const [rows]: any = await pool.execute(`
+        SELECT 
+          posts.post_id,
+          posts.post_content,
+          posts.created_at,
+          users.username,
+          users.email,
+          EXISTS (
+            SELECT 1 FROM likes
+            WHERE likes.post_id = posts.post_id AND likes.user_id = ?
+          ) AS liked,
+          (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.post_id) AS likes_count,
+          (SELECT COUNT(*) FROM comments WHERE comments.post_id = posts.post_id) AS comments_count
+        FROM posts
+        JOIN users ON posts.user_id = users.user_id
+        WHERE posts.user_id IN (
+          SELECT following_id FROM follows WHERE follower_id = ?
+        )
+        ORDER BY posts.created_at DESC
+      `, [user_id, user_id]);
+  
+      const formattedPosts = rows.map((row: any) => ({
+        id: row.post_id,
+        author: {
+          name: row.email.split('@')[0],
+          username: row.username,
+          avatar: "/placeholder.svg?height=40&width=40"
+        },
+        content: row.post_content,
+        timestamp: row.created_at,
+        likes: row.likes_count,
+        comments: row.comments_count,
+        shares: Math.floor(Math.random() * 10),
+        department: "General",
+        liked: !!row.liked,
+      }));
+  
+      res.status(200).json(formattedPosts);
+    } catch (error: any) {
+      console.error("Error fetching feed posts:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
 
 

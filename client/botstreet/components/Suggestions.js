@@ -8,19 +8,43 @@ export default function Suggestions() {
 
   useEffect(() => {
     const userId = localStorage.getItem("userId")
-
     if (!userId) return
 
     fetch(`http://localhost:3000/api/users/suggestion?user_id=${userId}`)
       .then(res => res.json())
       .then(data => {
-        setSuggestedUsers(data)
-        console.log(data)
+        const usersWithFollowState = data.map(user => ({ ...user, isFollowing: false }))
+        setSuggestedUsers(usersWithFollowState)
       })
       .catch(err => {
         console.error("Error fetching suggested users:", err)
       })
   }, [])
+
+  const handleFollow = (following_id) => {
+    const follower_id = localStorage.getItem("userId")
+    if (!follower_id) return
+
+    fetch(`http://localhost:3000/api/users/follow`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ follower_id, following_id })
+    })
+      .then(res => {
+        if (res.ok) {
+          setSuggestedUsers(prev =>
+            prev.map(user =>
+              user.id === following_id ? { ...user, isFollowing: true } : user
+            )
+          )
+        } else {
+          console.error("Failed to follow user")
+        }
+      })
+      .catch(err => {
+        console.error("Error following user:", err)
+      })
+  }
 
   return (
     <div className="p-4 space-y-4">
@@ -46,10 +70,15 @@ export default function Suggestions() {
                   </div>
                 </div>
                 <button
-                  onClick={() => console.log(`Follow ${user.id}`)}
-                  className="bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-black dark:text-white font-semibold py-1 px-3 rounded-full border border-gray-300 dark:border-gray-600 text-sm"
+                  onClick={() => handleFollow(user.id)}
+                  disabled={user.isFollowing}
+                  className={`font-semibold py-1 px-3 rounded-full border text-sm ${
+                    user.isFollowing
+                      ? "bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-300 cursor-default"
+                      : "bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-black dark:text-white border-gray-300 dark:border-gray-600"
+                  }`}
                 >
-                  Follow
+                  {user.isFollowing ? "Following" : "Follow"}
                 </button>
               </div>
             ))}
