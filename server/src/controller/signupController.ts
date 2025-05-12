@@ -62,7 +62,7 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
     }
 
     const token = jwt.sign({ id: user.user_id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
-    res.status(200).json({ token, userId: user.user_id, username: user.username });
+    res.status(200).json({ token, userId: user.user_id, username: user.username , email:user.email, password:user.password});
     console.log('User logged in successfully:', user.user_id);  // Check if user is logged in successfully
   } catch (error) {
     console.error('Login error:', error.message, error.stack);
@@ -75,7 +75,7 @@ export const fetchUser = async (req: Request, res: Response): Promise<void> => {
   console.log("Trying to confirm token and send back user details");
 
   try {
-    const token = req.headers.authorization?.split(' ')[1];
+    const token = req.headers.authorization?.split(' ')[1]; 
     if (!token) {
       res.status(401).json({ error: 'No token provided' });
     }
@@ -101,5 +101,49 @@ export const fetchUser = async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     console.error('Error fetching user:', error);
     res.status(500).json({ error: 'Error fetching user' });
+  }
+};
+// Update User Details
+export const updateUserDetails = async (req: Request, res: Response): Promise<any> => {
+  const { userId, username, email, password } = req.body;
+  console.log("Received update request:", req.body);
+
+  // Input validation
+  if (!userId || (!username && !email && !password)) {
+    return res.status(400).json({ error: 'At least one field (username, email, or password) is required to update' });
+  }
+
+  try {
+    let updateQuery = 'UPDATE users SET ';
+    const values: any[] = [];
+
+    if (username) {
+      updateQuery += 'username = ?, ';
+      values.push(username);
+    }
+    if (email) {
+      updateQuery += 'email = ?, ';
+      values.push(email);
+    }
+    if (password) {
+      // Hash the password if it's provided
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateQuery += 'password = ?, ';
+      values.push(hashedPassword);
+    }
+
+    // Remove the trailing comma and space
+    updateQuery = updateQuery.slice(0, -2);
+    updateQuery += ' WHERE user_id = ?';
+    values.push(userId);
+
+    // Execute the update query
+    await pool.execute(updateQuery, values);
+    console.log('User details updated in DB');
+
+    res.status(200).json({ message: 'User details updated successfully' });
+  } catch (error) {
+    console.error('Error updating user details:', error.message, error.stack);
+    res.status(500).json({ error: 'Error updating user details' });
   }
 };

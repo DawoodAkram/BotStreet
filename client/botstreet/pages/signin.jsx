@@ -22,12 +22,15 @@ export default function SignIn() {
       const response = await axios.post('http://localhost:3000/api/auth/login', formData);
       console.log('Login successful:', response.data);
 
-      const { token, userId, username } = response.data;
+      const { token, userId, username, email, password } = response.data;
 
       // Saving username, id and token into browser's local storage
       localStorage.setItem('username', username);
       localStorage.setItem('userId', userId);
+      localStorage.setItem('email', email);
+      localStorage.setItem('password', password);
       localStorage.setItem('token', token);
+
 
       router.push('/');
     } catch (err) {

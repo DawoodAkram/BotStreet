@@ -2,18 +2,16 @@ import { useState, useEffect } from "react"
 import Header from "../../components/Header"
 import ForumFeed from "../../components/ForumFeed"
 import Suggestions from "../../components/Suggestions"
-import axios from "axios"
 import { useRouter } from "next/router"
 import Sidebar from "@/components/Sidebar"
 
 export default function Forums() {
-
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [refetch, setRefetch] = useState(false)
     const router = useRouter()
-    // To fetch Posts from the DB (backend)
+
     useEffect(() => {
         async function fetchPosts() {
             try {
@@ -44,11 +42,10 @@ export default function Forums() {
             if (!user_id) {
                 router.push('/signin')
             }
+
             const response = await fetch('http://localhost:3000/api/post/upload', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     user_id,
                     post_content: postContent.content,
@@ -58,7 +55,7 @@ export default function Forums() {
             const data = await response.json()
 
             if (response.ok) {
-                setRefetch((prev) => !prev)
+                setRefetch(prev => !prev)
                 return true
             } else {
                 console.error('Failed to create post:', data.message)
@@ -73,21 +70,15 @@ export default function Forums() {
     const handleLikePost = async (post_id) => {
         try {
             const user_id = localStorage.getItem('userId')
-            console.log(post_id);
 
             if (!user_id) {
                 router.push('/signin')
             }
 
-            const response = await fetch(`http://localhost:3000/api/post/likes`, {  // api/posts/likes
+            const response = await fetch(`http://localhost:3000/api/post/likes`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    user_id,
-                    post_id
-                }),      // user_id, post_id
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id, post_id }),
             })
 
             if (response.ok) {
@@ -106,30 +97,15 @@ export default function Forums() {
         try {
             const user_id = localStorage.getItem('userId')
 
-            if (!user_id || !post_id || !comment_text) {
-                console.log({ user_id, post_id, comment_text });
-
-            }
-
             if (!user_id) {
                 router.push('/signin')
             }
 
-
-            console.log({ user_id, post_id, comment_text }, "OUT");
-
             const response = await fetch('http://localhost:3000/api/post/comment', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    user_id,
-                    post_id,
-                    comment_text,
-                }),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id, post_id, comment_text }),
             })
-
 
             if (response.ok) {
                 setRefetch(prev => !prev)
@@ -144,35 +120,35 @@ export default function Forums() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <Header />
-  
-        <main className="container mx-auto grid grid-cols-1 md:grid-cols-12 gap-4">
-          {/* Sidebar */}
-          <div className="md:col-span-2 lg:col-span-1 border-r border-gray-200 dark:border-gray-800">
-            <Sidebar />
-          </div>
-  
-          {/* Forum Feed */}
-          <div className="md:col-span-7 lg:col-span-7 border-x border-gray-200 dark:border-gray-800 min-h-screen">
-            {loading ? (
-              <div className="flex justify-center items-center h-32">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-              </div>
-            ) : error ? (
-              <div className="p-4 text-red-600 text-center">{error}</div>
-            ) : (
-              <ForumFeed posts={posts} onNewPost={handleNewPost} onLikePost={handleLikePost} />
-            )}
-          </div>
-  
-          {/* Suggestions */}
-          <div className="hidden md:block md:col-span-3 lg:col-span-3">
-            <Suggestions />
-          </div>
-        </main>
-      </div>
-  
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
+            <Header />
+
+            <main className="flex-1 container mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 px-4 mt-4">
+                {/* Sidebar */}
+                <div className="md:col-span-2 lg:col-span-2">
+                    <div className="sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto">
+                        <Sidebar />
+                    </div>
+                </div>
+
+                {/* Forum Feed */}
+                <div className="md:col-span-7 lg:col-span-7 border-x border-gray-200 dark:border-gray-800 min-h-screen">
+                    {loading ? (
+                        <div className="flex justify-center items-center h-32">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                        </div>
+                    ) : error ? (
+                        <div className="p-4 text-red-600 text-center">{error}</div>
+                    ) : (
+                        <ForumFeed posts={posts} onNewPost={handleNewPost} onLikePost={handleLikePost} />
+                    )}
+                </div>
+
+                {/* Suggestions */}
+                <div className="hidden md:block md:col-span-3 lg:col-span-3">
+                    <Suggestions />
+                </div>
+            </main>
+        </div>
     )
 }
-
