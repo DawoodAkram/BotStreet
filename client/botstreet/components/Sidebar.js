@@ -22,8 +22,8 @@ const Sidebar = () => {
     if (!username) return [];
     return [
       { name: 'Forums', path: '/forums' },
-      { name: 'Profile', path: `/profile/${username}` },   // ✅ dynamic route
-      { name: 'Settings', path: `/settings?username=${username}` }, // ✅ dynamic route
+      { name: 'Profile', path: `/profile/${username}` },
+      { name: 'Settings', path: `/settings?username=${username}` },
       { name: 'Logout', path: '/logout' },
     ];
   }, [username]);
@@ -46,13 +46,12 @@ const Sidebar = () => {
       </button>
 
       <div
-        className={`fixed top-14 h-[calc(100vh-3.5rem)] left-0 w-64 bg-gray-900 text-gray-100 shadow-md z-40 transform ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        } transition-transform duration-300 ease-in-out`}
+        className={`fixed top-14 h-[calc(100vh-3.5rem)] left-0 w-64 bg-gray-900 text-gray-100 shadow-md z-40 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'
+          } transition-transform duration-300 ease-in-out`}
       >
         <div className="p-4">
           <h2 className="text-xl font-semibold mb-4 text-center">
-            {username ? `Welcome, ${username}` : 'Loading...'}
+            {username ? `Welcome, ${username}` : 'Please SignIn First...'}
           </h2>
           <nav>
             {links.map((link) =>
@@ -68,9 +67,8 @@ const Sidebar = () => {
                 <Link
                   key={link.name}
                   href={link.path}
-                  className={`block py-2 px-4 rounded hover:bg-gray-700 ${
-                    router.asPath === link.path ? 'bg-blue-600' : ''
-                  }`}
+                  className={`block py-2 px-4 rounded hover:bg-gray-700 ${router.asPath === link.path ? 'bg-blue-600' : ''
+                    }`}
                 >
                   {link.name}
                 </Link>

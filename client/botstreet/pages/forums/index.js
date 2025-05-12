@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import Header from "../../components/Header"
 import ForumFeed from "../../components/ForumFeed"
 import Suggestions from "../../components/Suggestions"
 import { useRouter } from "next/router"
 import Sidebar from "@/components/Sidebar"
+import ThemeContext from "@/contexts/ThemeContext"
 
 export default function Forums() {
     const [posts, setPosts] = useState([])
@@ -11,6 +12,7 @@ export default function Forums() {
     const [error, setError] = useState(null)
     const [refetch, setRefetch] = useState(false)
     const router = useRouter()
+    const value = useContext(ThemeContext)
 
     useEffect(() => {
         async function fetchPosts() {
@@ -119,8 +121,9 @@ export default function Forums() {
         }
     }
 
+
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
+        <div className={`min-h-screen ${value.theme === "dark" ? "bg-gray-950" : "bg-white"} flex flex-col`}>
             <Header />
 
             <main className="flex-1 container mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 px-4 mt-4">

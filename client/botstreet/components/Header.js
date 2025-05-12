@@ -1,16 +1,19 @@
 "use client"
 
-import { useState } from "react"
-import Link from "next/link"
+import { useState, useContext } from "react"
 import { Menu, Search, Bell, Mail, User } from "lucide-react"
 import ThemeToggler from "./ThemeToggler"
+import ThemeContext from "@/contexts/ThemeContext"
+import Link from "next/link"
 
 export default function Header() {
     const [searchQuery, setSearchQuery] = useState("")
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const value = useContext(ThemeContext)
+
 
     return (
-        <header className="sticky top-0 z-50 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800">
+        <header className={`sticky top-0 z-50 ${value.theme === "dark" ? "dark:bg-gray-950" : "bg-white"} border-b border-gray-200 dark:border-gray-800`}>
             <div className="container mx-auto flex items-center justify-between h-14 px-4">
                 <div className="flex items-center md:w-64">
                     <button className="md:hidden p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -36,7 +39,7 @@ export default function Header() {
                 </div>
 
                 <div className="flex items-center space-x-1">
-                    <button className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 hidden md:block">
+                    <button className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 hidden md:block`}>
                         <Bell className="h-5 w-5" />
                     </button>
                     <button className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 hidden md:block">

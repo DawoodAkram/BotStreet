@@ -12,18 +12,17 @@ const Poll = ({ question, options, onVote }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-xl max-w-lg w-full mx-auto">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">{question}</h2>
+    <div className="bg-gray-700 text-gray-100 p-6 rounded-2xl shadow-xl max-w-lg w-full mx-auto">
+      <h2 className="text-2xl font-bold mb-4">{question}</h2>
       <div className="space-y-3">
         {options.map((option, index) => (
           <label
             key={index}
             className={`block cursor-pointer border rounded-xl px-4 py-2 transition 
-            ${
-              selected === index
-                ? "border-blue-600 bg-blue-50"
+            ${selected === index
+                ? "border-blue-600 bg-blue-400"
                 : "border-gray-300 hover:border-blue-400 hover:bg-blue-50/30"
-            }`}
+              }`}
           >
             <input
               type="radio"

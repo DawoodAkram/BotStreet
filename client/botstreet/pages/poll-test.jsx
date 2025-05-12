@@ -8,7 +8,7 @@ const PollTestPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center p-4">
       <Poll
         question="Which feature should we prioritize next?"
         options={["Dark Mode", "Real-time Chat", "Poll System", "Leaderboards"]}

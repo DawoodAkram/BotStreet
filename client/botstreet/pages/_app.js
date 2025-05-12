@@ -1,10 +1,10 @@
-import { ThemeProvider } from "@/contexts/ThemeContext";
+import { ThemeContextProvider } from "@/contexts/ThemeContext";
 import "@/styles/globals.css";
 
 export default function App({ Component, pageProps }) {
   return (
-    <ThemeProvider>
+    <ThemeContextProvider>
       <Component {...pageProps} />
-    </ThemeProvider>
+    </ThemeContextProvider>
   );
 }
