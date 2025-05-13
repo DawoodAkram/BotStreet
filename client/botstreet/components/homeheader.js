@@ -8,13 +8,18 @@ import ThemeToggler from './ThemeToggler';
 const HomeHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [username, setUsername] = useState(null);
+    const [userId, setUserId] = useState(null);
     const [scrolled, setScrolled] = useState(false);
     const [activeLink, setActiveLink] = useState('/');
 
     useEffect(() => {
         const storedUsername = localStorage.getItem('username');
+        const storedUserId = localStorage.getItem('userId')
         if (storedUsername) {
             setUsername(storedUsername);
+        }
+        if (storedUserId) {
+            setUserId(storedUserId)
         }
 
         // Set active link based on current path
@@ -51,16 +56,15 @@ const HomeHeader = () => {
     };
 
     return (
-        <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-            scrolled 
-                ? 'bg-gray-900/95 backdrop-blur-sm shadow-lg py-2' 
-                : 'bg-gray-900 shadow-md py-3'
-        }`}>
+        <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolled
+            ? 'bg-gray-900/95 backdrop-blur-sm shadow-lg py-2'
+            : 'bg-gray-900 shadow-md py-3'
+            }`}>
             <div className="container mx-auto">
                 <nav className="flex items-center justify-between px-4 sm:px-6 mx-auto">
                     {/* Logo */}
-                    <div 
-                        className="cursor-pointer flex items-center group" 
+                    <div
+                        className="cursor-pointer flex items-center group"
                         onClick={handleReload}
                     >
                         <div className="relative overflow-hidden rounded-lg transition-transform duration-300 group-hover:scale-105">
@@ -86,17 +90,15 @@ const HomeHeader = () => {
                             { path: '/contact', label: 'Contact' },
                             { path: '/about', label: 'About Us' },
                         ].map((link) => (
-                            <Link 
+                            <Link
                                 key={link.path}
-                                href={link.path} 
-                                className={`text-base font-medium hover:text-indigo-400 relative group py-2 ${
-                                    activeLink === link.path ? 'text-indigo-400' : ''
-                                }`}
+                                href={link.path}
+                                className={`text-base font-medium hover:text-indigo-400 relative group py-2 ${activeLink === link.path ? 'text-indigo-400' : ''
+                                    }`}
                             >
                                 {link.label}
-                                <span className={`absolute bottom-0 left-0 h-0.5 bg-indigo-500 transition-all duration-300 ${
-                                    activeLink === link.path ? 'w-full' : 'w-0 group-hover:w-full'
-                                }`}></span>
+                                <span className={`absolute bottom-0 left-0 h-0.5 bg-indigo-500 transition-all duration-300 ${activeLink === link.path ? 'w-full' : 'w-0 group-hover:w-full'
+                                    }`}></span>
                             </Link>
                         ))}
                     </div>
@@ -114,9 +116,9 @@ const HomeHeader = () => {
                                     <svg className="w-5 h-5 text-indigo-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                     </svg>
-                                    <span className="text-gray-300">
+                                    <Link href={`/profile/${userId}`} className="text-gray-300">
                                         <span className="text-indigo-400 font-semibold">{username}</span>
-                                    </span>
+                                    </Link>
                                 </div>
                                 <button
                                     onClick={handleLogout}
@@ -178,55 +180,54 @@ const HomeHeader = () => {
             </div>
 
             {/* Mobile Menu */}
-            <div 
-                className={`md:hidden fixed top-[57px] left-0 right-0 bg-gray-800 shadow-lg border-t border-gray-700 transition-all duration-300 transform ${
-                    isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
-                } ${scrolled ? 'top-[49px]' : 'top-[57px]'}`}
+            <div
+                className={`md:hidden fixed top-[57px] left-0 right-0 bg-gray-800 shadow-lg border-t border-gray-700 transition-all duration-300 transform ${isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+                    } ${scrolled ? 'top-[49px]' : 'top-[57px]'}`}
             >
                 <div className="flex flex-col py-4 px-6 space-y-4 max-h-[80vh] overflow-y-auto">
-                    <Link 
-                        href="/" 
+                    <Link
+                        href="/"
                         className={`text-base font-medium hover:text-indigo-400 ${activeLink === '/' ? 'text-indigo-400' : 'text-gray-300'}`}
                         onClick={closeMenu}
                     >
                         Home
                     </Link>
-                    <Link 
-                        href="/about" 
+                    <Link
+                        href="/about"
                         className={`text-base font-medium hover:text-indigo-400 ${activeLink === '/about' ? 'text-indigo-400' : 'text-gray-300'}`}
                         onClick={closeMenu}
                     >
                         About Us
                     </Link>
-                    <Link 
-                        href="/forums" 
+                    <Link
+                        href="/forums"
                         className={`text-base font-medium hover:text-indigo-400 ${activeLink === '/forums' ? 'text-indigo-400' : 'text-gray-300'}`}
                         onClick={closeMenu}
                     >
                         Forums
                     </Link>
                     <Link
-                        href="/projects" 
+                        href="/projects"
                         className={`text-base font-medium hover:text-indigo-400 ${activeLink === '/projects' ? 'text-indigo-400' : 'text-gray-300'}`}
                         onClick={closeMenu}
                     >
                         Projects
                     </Link>
-                    <Link 
-                        href="/polls" 
+                    <Link
+                        href="/polls"
                         className={`text-base font-medium hover:text-indigo-400 ${activeLink === '/polls' ? 'text-indigo-400' : 'text-gray-300'}`}
                         onClick={closeMenu}
                     >
                         Polls
                     </Link>
-                    <Link 
-                        href="/contact" 
+                    <Link
+                        href="/contact"
                         className={`text-base font-medium hover:text-indigo-400 ${activeLink === '/contact' ? 'text-indigo-400' : 'text-gray-300'}`}
                         onClick={closeMenu}
                     >
                         Contact
                     </Link>
-                    
+
                     <div className="flex flex-col pt-4 space-y-3 border-t border-gray-700">
                         {username ? (
                             <>

@@ -1,9 +1,7 @@
 import { useState, useEffect, useContext } from "react"
-import Header from "../../components/Header"
 import ForumFeed from "../../components/ForumFeed"
 import Suggestions from "../../components/Suggestions"
 import { useRouter } from "next/router"
-import Sidebar from "@/components/Sidebar"
 import ThemeContext from "@/contexts/ThemeContext"
 import HomeHeader from "@/components/homeheader"
 

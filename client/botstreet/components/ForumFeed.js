@@ -1,11 +1,15 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import Image from "next/image"
 import Post from "./Post"
+import ThemeContext from "@/contexts/ThemeContext"
 
 export default function ForumFeed({ allPosts, feedPosts, onNewPost, onLikePost, onCommentPost }) {
   const [activeTab, setActiveTab] = useState("all")
   const [newPostContent, setNewPostContent] = useState("")
   const [currentUser, setCurrentUser] = useState({ username: "", name: "" })
+
+  const { theme } = useContext(ThemeContext)
+  const isDark = theme === "dark"
 
   useEffect(() => {
     const username = localStorage.getItem("username") || "anonymous"
@@ -67,7 +71,7 @@ export default function ForumFeed({ allPosts, feedPosts, onNewPost, onLikePost, 
             <input
               type="text"
               placeholder="What's happening on campus?"
-              className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 py-2 px-3 text-sm mb-2"
+              className={`w-full rounded-md border  ${isDark ? "bg-gray-800 border-gray-700 " : "border-gray-300 bg-white"} py-2 px-3 text-sm mb-2`}
               value={newPostContent}
               onChange={(e) => setNewPostContent(e.target.value)}
             />

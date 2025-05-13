@@ -1,11 +1,11 @@
-import Header from '../../components/Header';
+import HomeHeader from '@/components/homeheader';
 import Sidebar from '../../components/Sidebar';
 import cookie from 'cookie';
 
 const Profile = ({ user }) => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Header />
+      <HomeHeader />
       <main className="grid grid-cols-1 md:grid-cols-12 gap-4">
         <div className="md:col-span-2 lg:col-span-2 border-r border-gray-200 dark:border-gray-800">
           <Sidebar />
