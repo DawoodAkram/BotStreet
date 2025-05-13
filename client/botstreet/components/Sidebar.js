@@ -32,9 +32,7 @@ const Sidebar = () => {
     localStorage.removeItem('username');
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
-    // localStorage.removeItem('password');
-    // localStorage.removeItem('email');
-    router.push('/signin');
+    router.push('/');
   };
 
   const links = useMemo(() => {
