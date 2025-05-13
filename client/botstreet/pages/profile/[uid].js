@@ -60,20 +60,18 @@ export async function getServerSideProps(context) {
       },
     });
 
-    console.log(res.error);
-
-    if (res.error === 'jwt expired') {
-      alert("Login Session Expired")
-      return {
-        redirect: {
-          destination: '/signin',
-          permanent: false,
-        },
-      };
-    }
-
     if (!res.ok) {
-      throw new Error('Failed to fetch user');
+      const errorData = await res.json();
+      if (errorData.error === 'jwt expired') {
+        return {
+          redirect: {
+            destination: '/signin',
+            permanent: false,
+          },
+        };
+      } else {
+        throw new Error(errorData.error);
+      }
     }
 
     const data = await res.json();
