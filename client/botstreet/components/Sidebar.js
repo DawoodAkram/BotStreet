@@ -15,17 +15,15 @@ import {
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [username, setUsername] = useState('');
-  const [userId, setUserId] = useState()
+  const [userId, setUserId] = useState();
   const router = useRouter();
 
   useEffect(() => {
-
     const storedUsername = localStorage.getItem('username');
     const storedUserId = localStorage.getItem('userId');
 
     if (storedUsername) setUsername(storedUsername);
     if (storedUserId) setUserId(storedUserId);
-
   }, []);
 
   const handleLogout = () => {
@@ -33,8 +31,6 @@ const Sidebar = () => {
     localStorage.removeItem('username');
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
-    // localStorage.removeItem('password');
-    // localStorage.removeItem('email');
     router.push('/signin');
   };
 
@@ -53,15 +49,16 @@ const Sidebar = () => {
   return (
     <>
       <button
-        className="p-2 md:hidden fixed top-4 left-4 z-[60] bg-gray-800 text-white rounded"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-      </button>
-
+  className="p-2 md:hidden fixed top-4 left-4 z-[60] bg-gray-800 text-white rounded"
+  onClick={() => setIsOpen(!isOpen)}
+>
+  {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+</button>
+      {/* Sidebar */}
       <div
-        className={`fixed top-14 h-[calc(100vh-3.5rem)] left-0 w-64 bg-gray-900 text-gray-100 shadow-lg z-40 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'
-          } transition-transform duration-300 ease-in-out`}
+        className={`fixed top-14 h-[calc(100vh-3.5rem)] left-0 w-64 bg-gray-900 text-gray-100 shadow-lg z-40 transform ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        } transition-transform duration-300 ease-in-out`}
       >
         <div className="p-4">
           <h2 className="text-xl font-semibold mb-6 text-center text-white">
@@ -82,10 +79,11 @@ const Sidebar = () => {
                 <Link
                   key={link.name}
                   href={link.path}
-                  className={`flex items-center py-2 px-4 rounded transition-colors ${router.asPath === link.path
-                    ? 'bg-blue-600 text-white font-semibold'
-                    : 'hover:bg-gray-700 text-gray-300'
-                    }`}
+                  className={`flex items-center py-2 px-4 rounded transition-colors ${
+                    router.asPath === link.path
+                      ? 'bg-blue-600 text-white font-semibold'
+                      : 'hover:bg-gray-700 text-gray-300'
+                  }`}
                 >
                   {link.icon}
                   {link.name}

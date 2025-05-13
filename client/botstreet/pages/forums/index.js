@@ -5,6 +5,7 @@ import Suggestions from "../../components/Suggestions"
 import { useRouter } from "next/router"
 import Sidebar from "@/components/Sidebar"
 import ThemeContext from "@/contexts/ThemeContext"
+import HomeHeader from "@/components/homeheader"
 
 export default function Forums() {
     const [allPosts, setAllPosts] = useState([])
@@ -13,7 +14,8 @@ export default function Forums() {
     const [error, setError] = useState(null)
     const [refetch, setRefetch] = useState(false)
     const router = useRouter()
-    const value = useContext(ThemeContext)
+    const { theme } = useContext(ThemeContext)
+    const isDark = theme === "dark"
 
     useEffect(() => {
         async function fetchData() {
@@ -22,7 +24,7 @@ export default function Forums() {
     
                 const [allRes, feedRes] = await Promise.all([
                     fetch(`http://localhost:3000/api/post/?user_id=${user_id}`),
-                    fetch(`http://localhost:3000/api/post/feed/${user_id}`) // ✅ fixed route
+                    fetch(`http://localhost:3000/api/post/feed/${user_id}`)
                 ]);
     
                 const allData = await allRes.json();
@@ -44,7 +46,6 @@ export default function Forums() {
     
         fetchData();
     }, [refetch]);
-    
 
     const handleNewPost = async (postContent) => {
         try {
@@ -118,36 +119,51 @@ export default function Forums() {
     }
 
     return (
-        <div className={`min-h-screen ${value.theme === "dark" ? "bg-gray-950" : "bg-white"} flex flex-col`}>
-            <Header />
-
-            <main className="flex-1 container mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 px-4 mt-4">
-                <div className="md:col-span-2 lg:col-span-2">
-                    <div className="sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto">
-                        <Sidebar />
+        <div className={`min-h-screen ${isDark ? "bg-gray-950 text-gray-100" : "bg-gray-50 text-gray-800"} transition-colors duration-200 flex flex-col`}>
+            <HomeHeader />
+            <main className="flex-1 container mx-auto px-4 mt-4">
+                {/* Page Header Section - now full width */}
+                <div className={`w-full py-8 rounded-lg shadow-sm ${isDark ? "bg-gray-800 text-gray-100" : "bg-gradient-to-r from-indigo-50 to-blue-50 text-gray-800"} mb-6`}>
+                    <div className="container mx-auto px-6">
+                        <div className="text-center">
+                            <h1 className={`text-3xl md:text-4xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
+                                BotStreet <span className="text-indigo-500">Forums</span>
+                            </h1>
+                            <p className={`mt-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+                                Connect with the community, share ideas, and get inspired.
+                            </p>
+                            <div className="w-24 h-1 bg-indigo-500 mx-auto mt-4"></div>
+                        </div>
                     </div>
                 </div>
 
-                <div className="md:col-span-7 lg:col-span-7 border-x border-gray-200 dark:border-gray-800 min-h-screen">
-                    {loading ? (
-                        <div className="flex justify-center items-center h-32">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                        </div>
-                    ) : error ? (
-                        <div className="p-4 text-red-600 text-center">{error}</div>
-                    ) : (
-                        <ForumFeed
-                            allPosts={allPosts}
-                            feedPosts={feedPosts}
-                            onNewPost={handleNewPost}
-                            onLikePost={handleLikePost}
-                            onCommentPost={handleCommentPost}
-                        />
-                    )}
-                </div>
+                {/* Centered content container */}
+                <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-6">
+                    {/* Main content - ForumFeed */}
+                    <div className={`flex-1 border ${isDark ? "border-gray-800 bg-gray-900 text-gray-100" : "border-gray-200 bg-white text-gray-800"} rounded-lg shadow-sm`}>
+                        {loading ? (
+                            <div className="flex justify-center items-center h-32">
+                                <div className={`animate-spin rounded-full h-8 w-8 border-b-2 ${isDark ? "border-blue-400" : "border-indigo-600"}`}></div>
+                            </div>
+                        ) : error ? (
+                            <div className={`p-4 text-center ${isDark ? "text-red-400" : "text-red-600"}`}>{error}</div>
+                        ) : (
+                            <ForumFeed
+                                allPosts={allPosts}
+                                feedPosts={feedPosts}
+                                onNewPost={handleNewPost}
+                                onLikePost={handleLikePost}
+                                onCommentPost={handleCommentPost}
+                            />
+                        )}
+                    </div>
 
-                <div className="hidden md:block md:col-span-3 lg:col-span-3">
-                    <Suggestions />
+                    {/* Sidebar - Who to Follow and Forums tabs */}
+                    <div className="md:w-80 flex-shrink-0">
+                        <div className={`rounded-lg shadow-sm p-4 ${isDark ? "bg-gray-800 text-gray-100" : "bg-white text-gray-800"} sticky top-20`}>
+                            <Suggestions />
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>
