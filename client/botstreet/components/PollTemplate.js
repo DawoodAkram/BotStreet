@@ -14,7 +14,19 @@ const PollTemplate = ({ poll }) => {
       await axios.post("http://localhost:3000/api/polls/vote", {
         option_id: selectedOptionId,
       });
-      setVoted(true);
+
+      // After vote, find the selected option and update its vote count
+      const updatedOptions = poll.options.map((option) => {
+        if (option.option_id === selectedOptionId) {
+          return { ...option, votes: option.votes + 1 };
+        }
+        return option;
+      });
+
+      // Update the state to reflect the new vote count
+      poll.options = updatedOptions;
+
+      setVoted(true); // Disable voting UI after submitting the vote
     } catch (err) {
       console.error("Vote failed:", err);
       alert("Something went wrong while voting.");
@@ -31,7 +43,7 @@ const PollTemplate = ({ poll }) => {
         {poll.options.map((option) => (
           <label
             key={option.option_id}
-            className={`block cursor-pointer border rounded-xl px-4 py-2 transition 
+            className={`flex justify-between items-center cursor-pointer border rounded-xl px-4 py-2 transition 
               ${selectedOptionId === option.option_id
                 ? "border-blue-600 bg-blue-400"
                 : "border-gray-300 hover:border-blue-400 hover:bg-blue-50/30"
@@ -45,7 +57,8 @@ const PollTemplate = ({ poll }) => {
               onChange={() => setSelectedOptionId(option.option_id)}
               disabled={voted}
             />
-            {option.option_text}
+            <span>{option.option_text}</span>
+            <span>{option.votes} votes</span> {/* This will appear on the right side */}
           </label>
         ))}
       </div>

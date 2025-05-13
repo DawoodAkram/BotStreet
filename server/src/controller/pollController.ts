@@ -45,17 +45,24 @@ export const createPoll = async (req: Request, res: Response): Promise<any> => {
 // Get all polls with their options and vote counts
 export const getAllPolls = async (req: Request, res: Response): Promise<any> => {
     try {
-        const [polls] = await pool.query<RowDataPacket[]>(
-            `SELECT * FROM polls ORDER BY created_at DESC`
-        );
+        const [polls] = await pool.query<RowDataPacket[]>(`
+            SELECT * FROM polls ORDER BY created_at DESC
+        `);
 
         const pollsWithOptions = await Promise.all(
-            polls.map(async poll => {
+            polls.map(async (poll) => {
                 const [options] = await pool.query<RowDataPacket[]>(
                     `SELECT option_id, option_text, votes FROM poll_options WHERE poll_id = ?`,
                     [poll.poll_id]
                 );
-                return { ...poll, options };
+
+                // Calculate total votes for each option
+                const optionsWithVotes = options.map((option) => ({
+                    ...option,
+                    voteCount: option.votes // votes for each option
+                }));
+
+                return { ...poll, options: optionsWithVotes };
             })
         );
 
@@ -66,6 +73,8 @@ export const getAllPolls = async (req: Request, res: Response): Promise<any> => 
     }
 };
 
+
+
 export const votePoll = async (req: Request, res: Response): Promise<any> => {
     const { option_id } = req.body;
 
@@ -74,18 +83,28 @@ export const votePoll = async (req: Request, res: Response): Promise<any> => {
     }
 
     try {
+        // Update the vote count for the selected option
         const [result] = await pool.query<ResultSetHeader>(
             `UPDATE poll_options SET votes = votes + 1 WHERE option_id = ?`,
             [option_id]
         );
 
+        // Check if the option exists
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'Option not found' });
         }
 
-        res.status(200).json({ message: 'Vote recorded' });
+        // Retrieve the updated vote count
+        const [updatedOption] = await pool.query<RowDataPacket[]>(
+            `SELECT votes FROM poll_options WHERE option_id = ?`,
+            [option_id]
+        );
+
+        // Return the updated vote count along with a success message
+        res.status(200).json({ message: 'Vote recorded', updatedVoteCount: updatedOption[0].votes });
     } catch (err) {
         console.error('Error recording vote:', err);
         res.status(500).json({ error: 'Failed to vote' });
     }
 };
+
