@@ -1,5 +1,3 @@
-'use client';
-
 import HomeHeader from '@/components/homeheader';
 
 const Contact = () => {
@@ -40,3 +38,10 @@ const Contact = () => {
 };
 
 export default Contact;
+
+export async function getStaticProps() {
+  // Nothing to fetch => static hard coded page
+  return {
+    props: {},
+  };
+}

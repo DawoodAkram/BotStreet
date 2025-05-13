@@ -2,7 +2,6 @@ import { useContext } from "react"
 import useSWR from "swr"
 import ForumFeed from "../../components/ForumFeed"
 import Suggestions from "../../components/Suggestions"
-import { useRouter } from "next/router"
 import ThemeContext from "@/contexts/ThemeContext"
 import HomeHeader from "@/components/homeheader"
 

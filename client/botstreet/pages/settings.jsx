@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Header from "../components/Header";
 import Sidebar from '../components/Sidebar'; // Ensure correct path
 import axios from 'axios';
+import HomeHeader from '@/components/homeheader';
 
 const Settings = () => {
   const router = useRouter();
@@ -57,12 +57,10 @@ const Settings = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
-      {/* Sidebar */}
-      <Sidebar />
 
-      <div className="flex-1 ml-64"> {/* This ensures content doesn't hide behind sidebar */}
-        {/* Header */}
-        <Header />
+
+      <div className="flex-1">
+        <HomeHeader />
 
         <div className="container mx-auto p-4 pt-12"> {/* Added padding top to ensure content is visible */}
           <h1 className="text-2xl font-bold text-center text-gray-800 dark:text-white">Settings</h1>
