@@ -1,9 +1,8 @@
-import cookie from 'cookie';
 import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
+import cookie from 'cookie';
 
 const Profile = ({ user }) => {
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Header />
@@ -18,7 +17,7 @@ const Profile = ({ user }) => {
             <div className="mt-4 p-6 border border-gray-200 dark:border-gray-800 rounded-lg">
               <div className="mb-4">
                 <span className="font-semibold text-lg text-gray-700 dark:text-white">Username:</span>
-                <p className="text-gray-500 dark:text-gray-400">{user.name}</p>
+                <p className="text-gray-500 dark:text-gray-400">{user.username}</p>
               </div>
               <div className="mb-4">
                 <span className="font-semibold text-lg text-gray-700 dark:text-white">UserID:</span>
@@ -40,22 +39,22 @@ export default Profile;
 
 
 export async function getServerSideProps(context) {
-  const cookies = cookie.parse(context.req.headers.cookie || '');
-  const token = cookies.token || '';
-
-  // console.log('SSR FUNC => ', token);
+  const { uid } = context.params;
+  const cookies = context.req.headers.cookie;
+  const parsedCookies = cookie.parse(cookies || '');
+  const token = parsedCookies.token;
 
   if (!token) {
     return {
       redirect: {
-        destination: '/signin',
+        destination: '/login',
         permanent: false,
       },
     };
   }
 
   try {
-    const res = await fetch('http://localhost:3000/api/auth/islogin', {
+    const res = await fetch(`http://localhost:3000/api/auth/profile/${uid}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -65,24 +64,17 @@ export async function getServerSideProps(context) {
       throw new Error('Failed to fetch user');
     }
 
-    const { userId, name, email } = await res.json();
+    const data = await res.json();
 
     return {
       props: {
-        user: {
-          userId,
-          name,
-          email,
-        },
+        user: data,
       },
     };
   } catch (err) {
-    console.error('Error in getServerSideProps:', err.message);
+    console.error('Error fetching user:', err.message);
     return {
-      redirect: {
-        destination: '/signin',
-        permanent: false,
-      },
+      notFound: true,
     };
   }
 }

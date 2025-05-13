@@ -5,5 +5,5 @@ const router = express.Router();
 
 router.post('/register', handleRegisterUser);
 router.post('/login',loginUser);
-router.post('/islogin',fetchUser);
+router.get('/profile/:uid', fetchUser);
 export default router;

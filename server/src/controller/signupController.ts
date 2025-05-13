@@ -70,40 +70,6 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-
-export const fetchUser = async (req: Request, res: Response): Promise<void> => {
-  console.log("Trying to confirm token and send back user details");
-
-  try {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) {
-      res.status(401).json({ error: 'No token provided' });
-    }
-
-    console.log("TOKEN RECEIVED FROM FRONTEND:", token);
-
-    const decoded = jwt.verify(token, SECRET_KEY) as jwt.JwtPayload;
-    const userId = decoded.id;
-
-    console.log('FETCHING USER DETAILS FOR USER ID:', userId);
-
-    const query = 'SELECT user_id, username , email FROM users WHERE user_id = ?';
-    const [rows]: any = await pool.execute(query, [userId]);
-
-    if (rows.length === 0) {
-      res.status(404).json({ error: 'User not found' });
-    }
-
-    const user = rows[0];
-    console.log('User details:', user);
-
-    res.status(200).json({ userId: user.user_id, name: user.username });
-  } catch (error) {
-    console.error('Error fetching user:', error);
-    res.status(500).json({ error: 'Error fetching user' });
-  }
-};
-
 // Update User Details
 export const updateUserDetails = async (req: Request, res: Response): Promise<any> => {
   const { userId, username, email, password } = req.body;
@@ -146,5 +112,40 @@ export const updateUserDetails = async (req: Request, res: Response): Promise<an
   } catch (error) {
     console.error('Error updating user details:', error.message, error.stack);
     res.status(500).json({ error: 'Error updating user details' });
+  }
+};
+
+export const fetchUser = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    const uid = req.params.uid;
+
+    if (!token) {
+      return res.status(401).json({ error: 'No token provided' });
+    }
+
+    if (!uid) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+
+    // Validate token
+    jwt.verify(token, SECRET_KEY);
+
+    const query = 'SELECT user_id, username, email FROM users WHERE user_id = ?';
+    const [rows]: any = await pool.execute(query, [uid]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const user = rows[0];
+    res.status(200).json({
+      userId: user.user_id,
+      username: user.username,
+      email: user.email,
+    });
+  } catch (error) {
+    console.error('Error fetching user:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
