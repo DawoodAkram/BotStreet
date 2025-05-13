@@ -138,7 +138,7 @@ export default function Forums() {
                 </div>
 
                 {/* Centered content container */}
-                <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-6">
+                <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-6">
                     {/* Main content - ForumFeed */}
                     <div className={`flex-1 border ${isDark ? "border-gray-800 bg-gray-900 text-gray-100" : "border-gray-200 bg-white text-gray-800"} rounded-lg shadow-sm`}>
                         {loading ? (
