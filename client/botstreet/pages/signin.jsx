@@ -40,7 +40,7 @@ export default function SignIn() {
       localStorage.setItem('userId', userId);
       // localStorage.setItem('email', email);
       // localStorage.setItem('password', password);
-      localStorage.setItem('token', token);
+      // localStorage.setItem('token', token);
 
 
       router.push('/');

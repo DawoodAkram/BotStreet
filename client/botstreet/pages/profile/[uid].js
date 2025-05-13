@@ -47,7 +47,7 @@ export async function getServerSideProps(context) {
   if (!token) {
     return {
       redirect: {
-        destination: '/login',
+        destination: '/signin',
         permanent: false,
       },
     };
@@ -59,6 +59,18 @@ export async function getServerSideProps(context) {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    console.log(res.error);
+
+    if (res.error === 'jwt expired') {
+      alert("Login Session Expired")
+      return {
+        redirect: {
+          destination: '/signin',
+          permanent: false,
+        },
+      };
+    }
 
     if (!res.ok) {
       throw new Error('Failed to fetch user');
