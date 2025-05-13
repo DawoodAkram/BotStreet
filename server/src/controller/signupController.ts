@@ -146,6 +146,6 @@ export const fetchUser = async (req: Request, res: Response): Promise<any> => {
     });
   } catch (error) {
     console.error('Error fetching user:', error.message);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: error.message });
   }
 };
