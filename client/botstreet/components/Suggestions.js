@@ -1,10 +1,13 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import Image from "next/image"
+import ThemeContext from "@/contexts/ThemeContext"
 
 export default function Suggestions() {
   const [suggestedUsers, setSuggestedUsers] = useState([])
+  const { theme } = useContext(ThemeContext)
+  const isDark = theme === "dark"
 
   useEffect(() => {
     const userId = localStorage.getItem("userId")
@@ -49,7 +52,7 @@ export default function Suggestions() {
   return (
     <div className="p-4 space-y-4">
       <div className="sticky top-16">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mt-4">
+        <div className={`${isDark ? "bg-gray-800" : "bg-white"} rounded-lg shadow p-4 mt-4`}>
           <h2 className="font-bold text-lg mb-3">Who to Follow</h2>
           <div className="space-y-4">
             {suggestedUsers.map((user, index) => (
@@ -72,11 +75,10 @@ export default function Suggestions() {
                 <button
                   onClick={() => handleFollow(user.id)}
                   disabled={user.isFollowing}
-                  className={`font-semibold py-1 px-3 rounded-full border text-sm ${
-                    user.isFollowing
-                      ? "bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-300 cursor-default"
-                      : "bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-black dark:text-white border-gray-300 dark:border-gray-600"
-                  }`}
+                  className={`font-semibold py-1 px-3 rounded-full border text-sm ${user.isFollowing
+                    ? "bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-300 cursor-default"
+                    : "bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-black dark:text-white border-gray-300 dark:border-gray-600"
+                    }`}
                 >
                   {user.isFollowing ? "Following" : "Follow"}
                 </button>

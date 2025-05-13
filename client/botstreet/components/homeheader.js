@@ -86,7 +86,7 @@ const HomeHeader = () => {
                         {[
                             { path: '/forums', label: 'Forums' },
                             { path: '/projects', label: 'Projects' },
-                            { path: '/polls', label: 'Polls' },
+                            { path: '/pollspage', label: 'Polls' },
                             { path: '/contact', label: 'Contact' },
                             { path: '/about', label: 'About Us' },
                         ].map((link) => (
