@@ -62,7 +62,7 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
     }
 
     const token = jwt.sign({ id: user.user_id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
-    res.status(200).json({ token, userId: user.user_id, username: user.username , email:user.email, password:user.password});
+    res.status(200).json({ token, userId: user.user_id, username: user.username });
     console.log('User logged in successfully:', user.user_id);  // Check if user is logged in successfully
   } catch (error) {
     console.error('Login error:', error.message, error.stack);
@@ -75,7 +75,7 @@ export const fetchUser = async (req: Request, res: Response): Promise<void> => {
   console.log("Trying to confirm token and send back user details");
 
   try {
-    const token = req.headers.authorization?.split(' ')[1]; 
+    const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
       res.status(401).json({ error: 'No token provided' });
     }
@@ -87,7 +87,7 @@ export const fetchUser = async (req: Request, res: Response): Promise<void> => {
 
     console.log('FETCHING USER DETAILS FOR USER ID:', userId);
 
-    const query = 'SELECT userid, name FROM users WHERE userid = ?';
+    const query = 'SELECT user_id, username , email FROM users WHERE user_id = ?';
     const [rows]: any = await pool.execute(query, [userId]);
 
     if (rows.length === 0) {
@@ -97,12 +97,13 @@ export const fetchUser = async (req: Request, res: Response): Promise<void> => {
     const user = rows[0];
     console.log('User details:', user);
 
-    res.status(200).json({ userId: user.userid, name: user.name });
+    res.status(200).json({ userId: user.user_id, name: user.username });
   } catch (error) {
     console.error('Error fetching user:', error);
     res.status(500).json({ error: 'Error fetching user' });
   }
 };
+
 // Update User Details
 export const updateUserDetails = async (req: Request, res: Response): Promise<any> => {
   const { userId, username, email, password } = req.body;

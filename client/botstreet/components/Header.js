@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useContext } from "react"
 import { Menu, Search, Bell, Mail, User } from "lucide-react"
 import ThemeToggler from "./ThemeToggler"
@@ -10,7 +8,6 @@ export default function Header() {
     const [searchQuery, setSearchQuery] = useState("")
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const value = useContext(ThemeContext)
-
 
     return (
         <header className={`sticky top-0 z-50 ${value.theme === "dark" ? "dark:bg-gray-950" : "bg-white"} border-b border-gray-200 dark:border-gray-800`}>
@@ -80,3 +77,8 @@ export default function Header() {
         </header>
     )
 }
+
+// export async function getStaticProps() {
+
+//     return
+// }

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -20,15 +21,25 @@ export default function SignIn() {
 
     try {
       const response = await axios.post('http://localhost:3000/api/auth/login', formData);
-      console.log('Login successful:', response.data);
+      console.log('Login successful:');
 
-      const { token, userId, username, email, password } = response.data;
+      const { token, userId, username } = response.data;
+
+      console.log(token);
+      console.log(userId);
+      console.log(username);
+
+      if (token) {
+        console.log('IN TOKEN');
+
+        Cookies.set('token', token, { expires: 7 }); // store for 7 days
+      }
 
       // Saving username, id and token into browser's local storage
       localStorage.setItem('username', username);
       localStorage.setItem('userId', userId);
-      localStorage.setItem('email', email);
-      localStorage.setItem('password', password);
+      // localStorage.setItem('email', email);
+      // localStorage.setItem('password', password);
       localStorage.setItem('token', token);
 
 

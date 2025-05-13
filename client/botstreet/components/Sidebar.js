@@ -15,30 +15,40 @@ import {
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [username, setUsername] = useState('');
+  const [userId, setUserId] = useState()
   const router = useRouter();
 
   useEffect(() => {
+
     const storedUsername = localStorage.getItem('username');
+    const storedUserId = localStorage.getItem('userId');
+
     if (storedUsername) setUsername(storedUsername);
+    if (storedUserId) setUserId(storedUserId);
+
   }, []);
 
   const handleLogout = () => {
+    Cookies.remove('token');
     localStorage.removeItem('username');
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    // localStorage.removeItem('password');
+    // localStorage.removeItem('email');
     router.push('/signin');
   };
 
   const links = useMemo(() => {
-    if (!username) return [];
+    if (!userId) return [];
     return [
       { name: 'Forums', path: '/forums', icon: <MessageCircle size={18} className="mr-2" /> },
       { name: 'Polls', path: '/polls', icon: <BarChart size={18} className="mr-2" /> },
       { name: 'Projects', path: '/projects', icon: <FolderKanban size={18} className="mr-2" /> },
-      { name: 'Profile', path: `/profile/${username}`, icon: <UserCircle size={18} className="mr-2" /> },
+      { name: 'Profile', path: `/profile/${userId}`, icon: <UserCircle size={18} className="mr-2" /> },
       { name: 'Settings', path: `/settings?username=${username}`, icon: <Settings size={18} className="mr-2" /> },
       { name: 'Logout', path: '/logout', icon: <LogOut size={18} className="mr-2" /> },
     ];
-  }, [username]);
+  }, [userId]);
 
   return (
     <>
