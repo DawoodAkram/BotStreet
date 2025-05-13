@@ -19,21 +19,21 @@ export default function Forums() {
         async function fetchData() {
             try {
                 const user_id = localStorage.getItem('userId');
-    
+
                 const [allRes, feedRes] = await Promise.all([
                     fetch(`http://localhost:3000/api/post/?user_id=${user_id}`),
-                    fetch(`http://localhost:3000/api/post/feed/${user_id}`) // ✅ fixed route
+                    fetch(`http://localhost:3000/api/post/feed/${user_id}`)
                 ]);
-    
+
                 const allData = await allRes.json();
                 const feedData = await feedRes.json();
-    
+
                 if (allRes.ok) setAllPosts(allData);
                 else setError('Failed to fetch all posts');
-    
+
                 if (feedRes.ok) setFeedPosts(feedData);
                 else setError('Failed to fetch feed posts');
-    
+
             } catch (err) {
                 setError('Error connecting to the server');
                 console.error(err);
@@ -41,10 +41,10 @@ export default function Forums() {
                 setLoading(false);
             }
         }
-    
+
         fetchData();
     }, [refetch]);
-    
+
 
     const handleNewPost = async (postContent) => {
         try {

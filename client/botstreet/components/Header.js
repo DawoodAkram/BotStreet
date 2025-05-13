@@ -18,7 +18,7 @@ export default function Header() {
                     </button>
 
                     <Link href="/" className="font-bold text-xl text-blue-600 dark:text-blue-500 ml-2">
-                        UniCommunity
+                        BotStreet
                     </Link>
                 </div>
 
@@ -36,7 +36,7 @@ export default function Header() {
                 </div>
 
                 <div className="flex items-center space-x-1">
-                    <button className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 hidden md:block`}>
+                    {/* <button className={`p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 hidden md:block`}>
                         <Bell className="h-5 w-5" />
                     </button>
                     <button className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 hidden md:block">
@@ -44,7 +44,7 @@ export default function Header() {
                     </button>
                     <button className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 md:hidden">
                         <Search className="h-5 w-5" />
-                    </button>
+                    </button> */}
                     <ThemeToggler />
                     <button className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800">
                         <User className="h-5 w-5" />

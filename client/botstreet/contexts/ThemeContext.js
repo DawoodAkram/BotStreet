@@ -3,10 +3,9 @@ import { createContext, useEffect, useState } from "react";
 const ThemeContext = createContext();
 
 export function ThemeContextProvider({ children }) {
-    const [theme, setTheme] = useState('dark');  // default to 'dark'
+    const [theme, setTheme] = useState('dark');
     const [mounted, setMounted] = useState(false);
 
-    // Read from localStorage and apply theme only on client
     useEffect(() => {
         const storedTheme = localStorage.getItem('theme') || 'dark';
         setTheme(storedTheme);
