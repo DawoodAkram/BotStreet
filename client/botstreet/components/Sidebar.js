@@ -40,7 +40,6 @@ const Sidebar = () => {
     return [
       { name: 'Forums', path: '/forums', icon: <MessageCircle size={18} className="mr-2" /> },
       { name: 'Polls', path: '/pollspage', icon: <BarChart size={18} className="mr-2" /> },
-      { name: 'Projects', path: '/projects', icon: <FolderKanban size={18} className="mr-2" /> },
       { name: 'Profile', path: `/profile/${userId}`, icon: <UserCircle size={18} className="mr-2" /> },
       { name: 'Settings', path: `/settings?username=${username}`, icon: <Settings size={18} className="mr-2" /> },
       { name: 'Logout', path: '/logout', icon: <LogOut size={18} className="mr-2" /> },

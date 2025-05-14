@@ -1,10 +1,10 @@
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import useSWR from "swr"
 import ForumFeed from "../../components/ForumFeed"
 import Suggestions from "../../components/Suggestions"
 import ThemeContext from "@/contexts/ThemeContext"
 import HomeHeader from "@/components/homeheader"
-
+import { useRouter } from "next/router"
 const fetcher = url => fetch(url).then(res => res.json())
 
 export default function Forums() {
@@ -12,7 +12,15 @@ export default function Forums() {
     const isDark = theme === "dark"
 
     const user_id = typeof window !== "undefined" ? localStorage.getItem("userId") : null
+    const router = useRouter()
 
+useEffect(() => {
+    const user_id = localStorage.getItem('userId')
+    console.log(user_id)
+    if (!user_id) {
+        router.replace('/')  // redirects to homepage if not logged in
+    }
+}, [])
     const { data: allPosts, error: allPostsError, mutate: mutateAllPosts, isLoading: loadingAllPosts } = useSWR(
         `http://localhost:3000/api/post/?user_id=${user_id}`,
         fetcher,
