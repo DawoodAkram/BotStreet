@@ -128,7 +128,6 @@ export const fetchUser = async (req: Request, res: Response): Promise<any> => {
       return res.status(400).json({ error: 'User ID is required' });
     }
 
-    // Validate token
     jwt.verify(token, SECRET_KEY);
 
     const query = 'SELECT user_id, username, email FROM users WHERE user_id = ?';
